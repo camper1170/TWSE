@@ -1,4 +1,4 @@
-package com.example.twse.dto
+package com.example.twse.model.data
 
 data class StockDayAvgAll(
     val Code: String, // 股票代號

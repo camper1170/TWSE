@@ -1,8 +1,8 @@
-package com.example.twse.service
+package com.example.twse.model.network
 
-import com.example.twse.dto.BwibbuAll
-import com.example.twse.dto.StockDayAll
-import com.example.twse.dto.StockDayAvgAll
+import com.example.twse.model.data.BwibbuAll
+import com.example.twse.model.data.StockDayAll
+import com.example.twse.model.data.StockDayAvgAll
 import retrofit2.Response
 import retrofit2.http.GET
 
