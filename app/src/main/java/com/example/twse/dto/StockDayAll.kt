@@ -21,7 +21,4 @@ data class StockDayAll(
 
     val transactionFormatted: String
         get() = Transaction.toLongOrNull()?.let { "%,d".format(it) } ?: "N/A"
-
-    val changeValue: Double
-        get() = Change.toDoubleOrNull() ?: 0.0
 }

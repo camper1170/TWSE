@@ -36,6 +36,7 @@ import com.example.twse.R
 import com.example.twse.dto.CombinedStockData
 import kotlinx.coroutines.launch
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +59,6 @@ fun FilterScreen(stockViewModel: StockViewModel = viewModel()) {
     Box(
         Modifier.fillMaxSize()
     ) {
-        // 内容布局
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -70,7 +71,11 @@ fun FilterScreen(stockViewModel: StockViewModel = viewModel()) {
                     },
                     actions = {
                         IconButton(onClick = { coroutineScope.launch { drawerState.open() } }) {
-                            Icon(Icons.Default.FilterList, contentDescription = "Filter", tint = Color.White)
+                            Icon(
+                                Icons.Default.FilterList,
+                                contentDescription = "Filter",
+                                tint = Color.White
+                            )
                         }
                     },
                     colors = TopAppBarDefaults.smallTopAppBarColors(
@@ -141,7 +146,6 @@ fun FilterScreen(stockViewModel: StockViewModel = viewModel()) {
 }
 
 
-
 @Composable
 fun DrawerContent(onApplyFilter: (String) -> Unit, onDismiss: () -> Unit) {
     Column(modifier = Modifier.padding(16.dp)) {
@@ -164,11 +168,9 @@ fun DrawerContent(onApplyFilter: (String) -> Unit, onDismiss: () -> Unit) {
 }
 
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StockScreen(stockViewModel: StockViewModel= viewModel()) {
+fun StockScreen(stockViewModel: StockViewModel = viewModel()) {
     val bwibbuAll by stockViewModel.bwibbuAll.observeAsState(emptyList())
     val stockDayAvgAll by stockViewModel.stockDayAvgAll.observeAsState(emptyList())
     val stockDayAll by stockViewModel.stockDayAll.observeAsState(emptyList())
@@ -198,7 +200,7 @@ fun StockScreen(stockViewModel: StockViewModel= viewModel()) {
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
-                        },
+                },
                 actions = {
                     IconButton(onClick = { isFilterVisible = true }) {
                         Icon(Icons.Default.FilterList, contentDescription = "Filter")
@@ -252,6 +254,7 @@ fun StockScreen(stockViewModel: StockViewModel= viewModel()) {
         }
     )
 }
+
 
 @Composable
 fun StockCard(combinedStock: CombinedStockData) {
@@ -343,6 +346,7 @@ fun StockCard(combinedStock: CombinedStockData) {
     }
 }
 
+
 @Composable
 fun RowContent(
     label1: String,
@@ -369,15 +373,27 @@ fun RowContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "$label1: ", style = textStyle, color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    text = "$label1: ",
+                    style = textStyle,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(text = value1, style = textStyle, color = value1Color)
                 Spacer(modifier = Modifier.width(5.dp))
 
-                Text(text = "$label2: ", style = textStyle, color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    text = "$label2: ",
+                    style = textStyle,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(text = value2 ?: "", style = textStyle, color = value1Color)
                 Spacer(modifier = Modifier.width(5.dp))
 
-                Text(text = "$label3: ", style = textStyle, color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    text = "$label3: ",
+                    style = textStyle,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(text = value3, style = textStyle, color = value1Color)
             }
         } else {

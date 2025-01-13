@@ -2,17 +2,12 @@ package com.example.twse.main
 
 import androidx.lifecycle.*
 import com.example.twse.dto.BwibbuAll
-import com.example.twse.dto.CombinedStockData
 import com.example.twse.dto.StockDayAll
 import com.example.twse.dto.StockDayAvgAll
 import com.example.twse.service.RetrofitClient
 import kotlinx.coroutines.launch
 
 class StockViewModel : ViewModel() {
-
-    private val _sortedStocks = MutableLiveData<List<CombinedStockData>>()
-    val sortedStocks: LiveData<List<CombinedStockData>> = _sortedStocks
-
 
     private val _bwibbuAll = MutableLiveData<List<BwibbuAll>>()
     val bwibbuAll: LiveData<List<BwibbuAll>> get() = _bwibbuAll
