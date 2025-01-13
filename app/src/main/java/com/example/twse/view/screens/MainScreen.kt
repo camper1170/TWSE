@@ -64,7 +64,6 @@ fun MainScreen(stockViewModel: StockViewModel = viewModel()) {
         )
 
         if (drawerState.isOpen) {
-            // Scrim 背景
             Box(
                 Modifier
                     .fillMaxSize()
