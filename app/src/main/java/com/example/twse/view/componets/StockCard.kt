@@ -1,6 +1,5 @@
 package com.example.twse.view.componets
 
-
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -12,14 +11,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
-import com.example.twse.model.data.BwibbuAll
-import com.example.twse.model.data.CombinedStockData
+import com.example.twse.model.data.StockDividendInfo
+import com.example.twse.model.data.AggregatedStockData
 
+/**
+ * StockCard:
+ * 用於顯示股票相關數據的卡片組件，支持點擊顯示詳細資訊。
+ *
+ * @param aggregatedStockData 聚合的股票數據，包括配息資訊、平均資訊、每日數據。
+ */
 @Composable
-fun StockCard(combinedStock: CombinedStockData) {
-    val bwibbuAll = combinedStock.bwibbuAll
-    val stockDayAvgAll = combinedStock.stockDayAvgAll
-    val stockDayAll = combinedStock.stockDayAll
+fun StockCard(aggregatedStockData: AggregatedStockData) {
+    val bwibbuAll = aggregatedStockData.stockDividendInfo
+    val stockDayAvgAll = aggregatedStockData.dailyStockAverage
+    val stockDayAll = aggregatedStockData.dailyStockData
     var isDialogVisible by remember { mutableStateOf(false) }
 
     Card(
@@ -106,6 +111,10 @@ fun StockCard(combinedStock: CombinedStockData) {
 }
 
 
+/**
+ * RowContent:
+ * 用於顯示數據的行組件，支持最多三列數據。
+ */
 @Composable
 fun RowContent(
     label1: String,
@@ -192,8 +201,16 @@ fun RowContent(
 }
 
 
+
+/**
+ * StockInfoDialog:
+ * 顯示股票詳細資訊的對話框。
+ *
+ * @param stock 股票配息資訊
+ * @param onDismiss 當對話框關閉時的回調函數。
+ */
 @Composable
-fun StockInfoDialog(stock: BwibbuAll, onDismiss: () -> Unit) {
+fun StockInfoDialog(stock: StockDividendInfo, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {

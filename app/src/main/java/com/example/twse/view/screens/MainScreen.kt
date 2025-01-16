@@ -18,21 +18,28 @@ import androidx.compose.material.rememberBottomDrawerState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.twse.model.constants.FilterOptions
 import com.example.twse.view.componets.DrawerContent
-import com.example.twse.viewmodel.StockViewModel
+import com.example.twse.viewmodel.StockListViewModel
 import kotlinx.coroutines.launch
 
-
+/**
+ * MainScreen:
+ * 主畫面組件，包含頂部工具列、股票清單畫面，以及底部抽屜用於篩選功能。
+ *
+ * @param stockListViewModel 用於獲取和操作股票數據的 ViewModel。
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(stockViewModel: StockViewModel = viewModel()) {
+fun MainScreen(stockListViewModel: StockListViewModel = viewModel()) {
     val drawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
     Box(
         Modifier.fillMaxSize()
     ) {
+        // Scaffold 用於提供工具列和主內容區域
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -63,6 +70,7 @@ fun MainScreen(stockViewModel: StockViewModel = viewModel()) {
             }
         )
 
+        // 當抽屜打開時，顯示背景遮罩，點擊時可關閉抽屜
         if (drawerState.isOpen) {
             Box(
                 Modifier
@@ -74,7 +82,7 @@ fun MainScreen(stockViewModel: StockViewModel = viewModel()) {
             )
         }
 
-        // 抽屉内容
+        // 底部抽屜，用於篩選選項
         BottomDrawer(
             drawerState = drawerState,
             gesturesEnabled = false,
@@ -86,9 +94,9 @@ fun MainScreen(stockViewModel: StockViewModel = viewModel()) {
                         .fillMaxWidth()
                 ) {
                     DrawerContent(
-                        onApplyFilter = { filterOption ->
+                        onApplyFilter = { selectedFilter ->
                             coroutineScope.launch {
-                                stockViewModel.applyFilter(filterOption)
+                                stockListViewModel.applyStockFilter(selectedFilter.toString())
                                 drawerState.close()
                             }
                         },

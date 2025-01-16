@@ -36,23 +36,39 @@ class StockListViewModel : ViewModel() {
     fun fetchAllStockData() {
         viewModelScope.launch {
             try {
-                // 並行獲取數據
+                // 並行加載數據
                 val stockDividendData = async { fetchStockDividendInfo() }
                 val dailyStockAverageData = async { fetchDailyStockAverage() }
                 val dailyStockDetailData = async { fetchDailyStockDetails() }
 
-                // 獲取結果
+                // 獲取數據結果
                 val stockDividendResult = stockDividendData.await()
                 val dailyStockAverageResult = dailyStockAverageData.await()
                 val dailyStockDetailResult = dailyStockDetailData.await()
 
+                // 檢查數據是否加載成功
+                Log.d(TAG, "Stock Dividend Data Loaded: $stockDividendResult")
+                Log.d(TAG, "Daily Stock Average Loaded: $dailyStockAverageResult")
+                Log.d(TAG, "Daily Stock Details Loaded: $dailyStockDetailResult")
+
+                // 更新 LiveData
+                _stockDividendList.value = stockDividendResult
+                _dailyStockAverageList.value = dailyStockAverageResult
+                _dailyStockDetailList.value = dailyStockDetailResult
+
                 // 整合數據
-                aggregateStockData(stockDividendResult, dailyStockAverageResult, dailyStockDetailResult)
+                aggregateStockData(
+                    stockDividendResult,
+                    dailyStockAverageResult,
+                    dailyStockDetailResult
+                )
+
             } catch (e: Exception) {
-                Log.e(TAG, "Error fetching stock data: ${e.message}", e) // 錯誤日誌
+                Log.e(TAG, "Error fetching stock data: ${e.message}", e)
             }
         }
     }
+
 
     /**
      * aggregateStockData:
@@ -72,7 +88,7 @@ class StockListViewModel : ViewModel() {
                     dailyStockData = dailyDetailList.find { it.Code == stock.Code }
                 )
             }
-            _aggregatedStockList.postValue(aggregatedData) // 更新聚合後的數據
+            _aggregatedStockList.postValue(aggregatedData.sortedByDescending { it.dailyStockData?.Code }) // 更新聚合後的數據
         }
     }
 
@@ -84,15 +100,18 @@ class StockListViewModel : ViewModel() {
         return try {
             val response = RetrofitClient.apiService.getStockInfo()
             if (response.isSuccessful) {
-                response.body()?.map {
+                val data = response.body()?.map {
                     it.copy(
                         PEratio = it.PEratio.takeIf { !it.isNullOrBlank() } ?: "0.0",
                         DividendYield = it.DividendYield.takeIf { !it.isNullOrBlank() } ?: "0.0",
                         Change = it.Change.takeIf { !it.isNullOrBlank() } ?: "0.0",
-                        MonthlyAveragePrice = it.MonthlyAveragePrice.takeIf { !it.isNullOrBlank() } ?: "0.0",
+                        MonthlyAveragePrice = it.MonthlyAveragePrice.takeIf { !it.isNullOrBlank() }
+                            ?: "0.0",
                         ClosingPrice = it.ClosingPrice.takeIf { !it.isNullOrBlank() } ?: "0.0"
                     )
                 } ?: emptyList()
+                Log.d(TAG, "fetchStockDividendInfo Success: $data") // 日誌檢查數據
+                data
             } else {
                 Log.e(TAG, "Failed to fetch stock dividend info: ${response.message()}")
                 emptyList()
@@ -114,7 +133,8 @@ class StockListViewModel : ViewModel() {
                 response.body()?.map {
                     it.copy(
                         ClosingPrice = it.ClosingPrice.takeIf { !it.isNullOrBlank() } ?: "0.0",
-                        MonthlyAveragePrice = it.MonthlyAveragePrice.takeIf { !it.isNullOrBlank() } ?: "0.0"
+                        MonthlyAveragePrice = it.MonthlyAveragePrice.takeIf { !it.isNullOrBlank() }
+                            ?: "0.0"
                     )
                 } ?: emptyList()
             } else {
@@ -153,18 +173,27 @@ class StockListViewModel : ViewModel() {
      * @param filterOption 篩選條件（FilterOptions 枚舉類型）。
      */
     fun applyStockFilter(filterOption: String) {
+        Log.d(TAG, "applyStockFilter called with option: $filterOption")
+
+        if (_stockDividendList.value == null) {
+            Log.e(TAG, "Cannot apply filter: _stockDividendList is null")
+            return
+        }
+
         val selectedFilter = FilterOptions.fromValue(filterOption)
         if (selectedFilter != null) {
             val sortedStockDividendList = when (selectedFilter) {
-                FilterOptions.CODE_ASC -> _stockDividendList.value?.filter { it.Code != null }?.sortedBy { it.Code }
-                FilterOptions.CODE_DESC -> _stockDividendList.value?.filter { it.Code != null }?.sortedByDescending { it.Code }
+                FilterOptions.CODE_ASC -> _stockDividendList.value?.filter { it.Code != null }
+                    ?.sortedBy { it.Code }
+
+                FilterOptions.CODE_DESC -> _stockDividendList.value?.filter { it.Code != null }
+                    ?.sortedByDescending { it.Code }
             } ?: emptyList()
 
-            // 檢查是否篩選後的數據為空
             if (sortedStockDividendList.isEmpty()) {
                 Log.w(TAG, "No data after applying filter: $filterOption")
             } else {
-                Log.d(TAG, "Sorted Data: $sortedStockDividendList")
+                Log.d(TAG, "Filtered Data: $sortedStockDividendList")
             }
 
             val dailyAverageList = _dailyStockAverageList.value ?: emptyList()
@@ -181,8 +210,10 @@ class StockListViewModel : ViewModel() {
             // 強制觸發 LiveData 更新
             _aggregatedStockList.value = null
             _aggregatedStockList.value = aggregatedData
+
+            Log.d(TAG, "Updated Aggregated Data: $aggregatedData")
         } else {
-            Log.e(TAG, "Invalid filter option: $filterOption") // 當篩選條件無效時記錄錯誤
+            Log.e(TAG, "Invalid filter option: $filterOption")
         }
     }
 }

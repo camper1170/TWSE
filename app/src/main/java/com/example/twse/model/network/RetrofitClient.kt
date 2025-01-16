@@ -3,9 +3,16 @@ package com.example.twse.model.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * RetrofitClient:
+ * 用於創建 Retrofit 實例，提供全域的 ApiService。
+ */
 object RetrofitClient {
     private const val BASE_URL = "https://openapi.twse.com.tw/"
 
+    /**
+     * ApiService 實例，使用 Retrofit 創建。
+     */
     val apiService: ApiService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
