@@ -69,7 +69,7 @@ fun StockListScreen(stockListViewModel: StockListViewModel = viewModel()) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("股票證券", style = MaterialTheme.typography.titleLarge) },
+                title = { Text(stringResource(R.string.title), style = MaterialTheme.typography.titleLarge) },
                 actions = {
                     IconButton(onClick = { Log.d("Filter", "Filter button clicked!") }) {
                         Icon(Icons.Default.FilterList, contentDescription = "Filter")

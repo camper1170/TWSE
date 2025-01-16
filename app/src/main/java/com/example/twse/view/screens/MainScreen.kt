@@ -17,8 +17,9 @@ import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.rememberBottomDrawerState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.twse.model.constants.FilterOptions
+import com.example.twse.R
 import com.example.twse.view.componets.DrawerContent
 import com.example.twse.viewmodel.StockListViewModel
 import kotlinx.coroutines.launch
@@ -45,7 +46,7 @@ fun MainScreen(stockListViewModel: StockListViewModel = viewModel()) {
                 TopAppBar(
                     title = {
                         Text(
-                            text = "股票證券",
+                            text = stringResource(id = R.string.title),
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onPrimary
                         )
@@ -108,7 +109,7 @@ fun MainScreen(stockListViewModel: StockListViewModel = viewModel()) {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            title = { Text("股票證券") },
+                            title = { Text(stringResource(R.string.title)) },
                             actions = {
                                 IconButton(onClick = { coroutineScope.launch { drawerState.open() } }) {
                                     Icon(Icons.Default.FilterList, contentDescription = "Filter")

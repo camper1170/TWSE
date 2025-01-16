@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">TWSE</string>
+    <string name="title">股票證券</string>
     <string name="loading_message">資料載入中，請稍候...</string>
     <string name="empty_name">無數據，請稍後重試。</string>
     <string name="temporary_no_data_message">暫無數據</string>
