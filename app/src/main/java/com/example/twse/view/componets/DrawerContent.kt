@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.twse.R
 import com.example.twse.model.constants.FilterOptions
 
 /**
@@ -17,7 +19,7 @@ import com.example.twse.model.constants.FilterOptions
 @Composable
 fun DrawerContent(onApplyFilter: (FilterOptions) -> Unit, onDismiss: () -> Unit) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Text("選擇排序方式")
+        Text(stringResource(R.string.select_sort_by))
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = {
@@ -26,7 +28,7 @@ fun DrawerContent(onApplyFilter: (FilterOptions) -> Unit, onDismiss: () -> Unit)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("依股票代號升序")
+            Text(stringResource(R.string.code_asc))
         }
         Spacer(modifier = Modifier.height(8.dp))
         Button(
@@ -36,7 +38,7 @@ fun DrawerContent(onApplyFilter: (FilterOptions) -> Unit, onDismiss: () -> Unit)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("依股票代號降序")
+            Text(stringResource(R.string.code_desc))
         }
     }
 }

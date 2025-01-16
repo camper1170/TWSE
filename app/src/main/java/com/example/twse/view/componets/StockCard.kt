@@ -9,8 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
+import com.example.twse.R
 import com.example.twse.model.data.StockDividendInfo
 import com.example.twse.model.data.AggregatedStockData
 
@@ -53,9 +55,9 @@ fun StockCard(aggregatedStockData: AggregatedStockData) {
             Spacer(modifier = Modifier.height(8.dp))
             // 開盤價與收盤價
             RowContent(
-                label1 = "開盤價",
+                label1 = stringResource(id = R.string.opening_price),
                 value1 = stockDayAll?.OpeningPrice ?: "0.0",
-                label2 = "收盤價",
+                label2 = stringResource(id = R.string.closing_price),
                 value2 = stockDayAvgAll?.ClosingPrice ?: "0.0",
                 value2Color = if ((stockDayAvgAll?.closingPriceValue
                         ?: 0.0) > (stockDayAvgAll?.monthlyAvgPriceValue ?: 0.0)
@@ -67,9 +69,9 @@ fun StockCard(aggregatedStockData: AggregatedStockData) {
 
             // 最高價與最低價
             RowContent(
-                label1 = "最高價",
+                label1 = stringResource(id = R.string.highest_price),
                 value1 = stockDayAll?.HighestPrice ?: "0.0",
-                label2 = "最低價",
+                label2 = stringResource(id = R.string.lowest_price),
                 value2 = stockDayAll?.LowestPrice ?: "0.0"
             )
 
@@ -77,11 +79,11 @@ fun StockCard(aggregatedStockData: AggregatedStockData) {
 
             // 漲跌價差與月平均價
             RowContent(
-                label1 = "漲跌價差",
+                label1 = stringResource(id = R.string.change),
                 value1 = stockDayAll?.Change ?: "N/A",
                 value1Color = if ((stockDayAll?.Change?.toDoubleOrNull() ?: 0.0) > 0)
                     MaterialTheme.colorScheme.error else Color(0xFF008000),
-                label2 = "月平均價",
+                label2 = stringResource(id = R.string.monthly_average_price),
                 value2 = stockDayAvgAll?.MonthlyAveragePrice ?: "0.0"
             )
 
@@ -89,11 +91,11 @@ fun StockCard(aggregatedStockData: AggregatedStockData) {
 
             // 成交筆數、成交股數、成交金額
             RowContent(
-                label1 = "成交筆數",
+                label1 = stringResource(id = R.string.transaction_formatted),
                 value1 = stockDayAll?.transactionFormatted ?: "0",
-                label2 = "成交股數",
+                label2 = stringResource(id = R.string.tradeValue_formatted),
                 value2 = stockDayAll?.tradeVolumeFormatted ?: "0",
-                label3 = "成交金額",
+                label3 = stringResource(id = R.string.tradeValue_formatted),
                 value3 = stockDayAll?.tradeValueFormatted ?: "0"
             )
 
@@ -176,7 +178,7 @@ fun RowContent(
                 Text(
                     text = value1,
                     style = textStyle2,
-                    color = if (label1 == "開盤價") Color(0xFF008000) else value1Color
+                    color = if (label1 == stringResource(R.string.opening_price)) Color(0xFF008000) else value1Color
                 )
             }
 
@@ -215,16 +217,16 @@ fun StockInfoDialog(stock: StockDividendInfo, onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         confirmButton = {
             Button(onClick = onDismiss) {
-                Text("確定")
+                Text(stringResource(R.string.confirm))
             }
         },
         text = {
             Column {
-                Text("本益比: ${stock.PEratioValue}")
+                Text("${stringResource(R.string.pe_ratio_value)}: ${stock.PEratioValue}")
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("殖利率(%): ${stock.DividendYieldValue} %")
+                Text("${stringResource(R.string.dividend_yield_value)}(%): ${stock.DividendYieldValue} %")
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("股價淨值比: ${stock.PBratio}")
+                Text("${stringResource(R.string.pb_ratio)}: ${stock.PBratio}")
             }
         }
     )
